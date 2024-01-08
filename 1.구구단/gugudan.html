@@ -48,36 +48,26 @@
               result: '땡',
               value: '',
             });
-
-            this.setState({ number: this.state.number + 1 });
-            this.setState({ number: this.state.number + 1 });
-            this.setState({ number: this.state.number + 1 });
-            // setState는 3번 호출했지만 결과적으로는 1씩 늘어남
-
-            this.setState((prevState) => {
-              return {
-                number: prevState.number + 1,
-              };
-            });
-            this.setState((prevState) => {
-              return {
-                number: prevState.number + 1,
-              };
-            });
-            this.setState((prevState) => {
-              return {
-                number: prevState.number + 1,
-              };
-            });
-            // setState를 3번 호출하고, 숫자가 3씩 늘어남
           }
+
+          this.input.focus();
         };
 
         onChange = (e) => {
           this.setState({ value: e.target.value });
         };
 
+        input;
+
+        onRefInput = (c) => {
+          this.input = c;
+        };
+
+        // mount 됐을 때 최초 한번 render 함수를 실행하고,
+        // state가 변경될 때 마다 render함수를 다시 실행한다.
         render() {
+          console.log('렌더링');
+
           return (
             <React.Fragment>
               {/** 
@@ -90,6 +80,7 @@
               </div>
               <form onSubmit={this.onSubmit}>
                 <input
+                  ref={this.onRefInput}
                   type="number"
                   value={this.state.value}
                   onChange={this.onChange}
@@ -99,7 +90,6 @@
               <div>
                 {this.state.answer} {this.state.result}
               </div>
-              <h3>{this.state.number}</h3>
             </React.Fragment>
           );
         }
