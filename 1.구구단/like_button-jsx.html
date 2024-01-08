@@ -20,10 +20,15 @@
       'use strict';
 
       class LikeButton extends React.Component {
-        constructor(props) {
-          super(props);
-          this.state = { liked: false };
-        }
+        state = { liked: false };
+
+        onClickButton = () => {
+          // 객체를 함부로 바꿀 수 없고, 대신 복사해야함(불변성)
+          // this.state.liked = true;
+
+          // react에서 지원하는 state 객체 값 수정 방법 setState
+          this.setState({ liked: true });
+        };
 
         render() {
           if (this.state.liked) {
@@ -33,9 +38,7 @@
           return (
             // babel이 React.createElement 형식으로 변경해준다.
             <>
-              <button onClick={() => this.setState({ liked: true })}>
-                Like
-              </button>
+              <button onClick={this.onClickButton}>Like</button>
               <input type="text" />
             </>
           );
