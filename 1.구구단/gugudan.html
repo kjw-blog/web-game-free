@@ -23,7 +23,7 @@
           second: Math.ceil(Math.random() * 9),
           value: '',
           result: '',
-          answer: '',
+          number: 0,
         };
 
         onSubmit = (e) => {
@@ -33,19 +33,43 @@
             parseInt(this.state.value) ===
             this.state.first * this.state.second
           ) {
-            this.setState({
-              result: '정답',
-              first: Math.ceil(Math.random() * 9),
-              second: Math.ceil(Math.random() * 9),
-              value: '',
-              answer: this.state.value,
+            // setState 파라미터에 들어가는 함수는
+            // 파라미터로 해당 state의 변경 전 상태값을 가지고있다.
+            this.setState((prevState) => {
+              return {
+                result: '정답: ' + prevState.value,
+                first: Math.ceil(Math.random() * 9),
+                second: Math.ceil(Math.random() * 9),
+                value: '',
+              };
             });
           } else {
             this.setState({
               result: '땡',
               value: '',
-              answer: '',
             });
+
+            this.setState({ number: this.state.number + 1 });
+            this.setState({ number: this.state.number + 1 });
+            this.setState({ number: this.state.number + 1 });
+            // setState는 3번 호출했지만 결과적으로는 1씩 늘어남
+
+            this.setState((prevState) => {
+              return {
+                number: prevState.number + 1,
+              };
+            });
+            this.setState((prevState) => {
+              return {
+                number: prevState.number + 1,
+              };
+            });
+            this.setState((prevState) => {
+              return {
+                number: prevState.number + 1,
+              };
+            });
+            // setState를 3번 호출하고, 숫자가 3씩 늘어남
           }
         };
 
@@ -75,6 +99,7 @@
               <div>
                 {this.state.answer} {this.state.result}
               </div>
+              <h3>{this.state.number}</h3>
             </React.Fragment>
           );
         }
