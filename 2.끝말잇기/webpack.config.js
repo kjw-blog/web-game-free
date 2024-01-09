@@ -38,5 +38,5 @@ module.exports = {
 };
 
 // 1. entry의 파일을 읽음
-// 2. module을 적용함
-// 3. output으로 뺌
+// 2. 해당 파일에 module을 적용함
+// 3. output으로 작성됨
