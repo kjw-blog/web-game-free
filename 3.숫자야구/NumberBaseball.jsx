@@ -28,12 +28,24 @@ class NumberBaseball extends Component {
             value={this.state.value}
             onChange={this.onChangeInput}
           />
-          <button></button>
+          <button>입력</button>
         </form>
         <div>시도: {this.state.tries.length}</div>
         <ul>
-          {['사과', '바나나', '포도', '귤', '감', '배', '밤'].map((v) => {
-            return <li>{v}</li>;
+          {[
+            { fruit: '사과', taste: '맛있다.' },
+            { fruit: '감', taste: '떫다.' },
+            { fruit: '귤', taste: '시다.' },
+            { fruit: '포도', taste: '달다.' },
+            { fruit: '밤', taste: '맛없다.' },
+            { fruit: '바나나', taste: '제일맛있다.' },
+          ].map((v) => {
+            return (
+              <li key={v.fruit + v.taste}>
+                {/** key는 반드시 고유한 값이어야함 index를 사용할 경우 성능최적화에 좋지 않기때문에 권장 X */}
+                <b>{v.fruit}</b> - <span>{v.taste}</span>
+              </li>
+            );
           })}
         </ul>
       </>
