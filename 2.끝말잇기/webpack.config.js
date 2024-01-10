@@ -1,42 +1,43 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-  // webpack 설정의 이름
-  name: 'word-relay-setting',
-  mode: 'development', // 실서비스: production
-  devtool: 'eval', // 빠르게?
+  mode: 'development',
+  devtool: 'eval', // product용은 hidden-source-map으로 소스 암호화 해주는거같음
   resolve: {
-    // app에서 .js나 .jsx를 찾음
-    // entry app 의 './client' 가 .js 나 .jsx 확장자로 존재하는지 확인함
     extensions: ['.js', '.jsx'],
   },
 
-  // 입력 (client.jsx 컴포넌트의 하위 컴포넌트는 추가할 필요 없음)
   entry: {
-    app: ['./client'],
+    app: './client',
   },
 
   module: {
     rules: [
       {
-        test: /\.jsx?/,
+        test: /\.jsx?$/,
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'],
-          plugins: ['@babel/plugin-proposal-class-properties'],
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: {
+                  browsers: ['> 5% in KR', 'last 2 chrome versions'],
+                },
+                debug: true,
+              },
+            ],
+            '@babel/preset-react',
+          ],
+          plugins: [],
         },
       },
     ],
   },
-
-  // 출력 (html로 보낼 파일을 만들어줌)
+  plugins: [],
   output: {
-    // 현재 폴더 '__dirname' 와 dist 경로를 합쳐줌
     path: path.join(__dirname, 'dist'),
     filename: 'app.js',
   },
 };
-
-// 1. entry의 파일을 읽음
-// 2. 해당 파일에 module을 적용함
-// 3. output으로 작성됨
