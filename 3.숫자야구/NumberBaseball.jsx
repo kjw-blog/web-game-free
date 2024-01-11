@@ -42,9 +42,9 @@ class NumberBaseball extends Component {
         </form>
         <div>시도: {this.state.tries.length}</div>
         <ul>
-          {this.fruits.map((v) => {
-            return <Try value={v} key={v.fruit + v.taste} />;
-          })}
+          {this.fruits.map((v) => (
+            <Try key={v.fruit + v.taste} value={v} />
+          ))}
         </ul>
       </>
     );
@@ -52,3 +52,17 @@ class NumberBaseball extends Component {
 }
 
 export default NumberBaseball;
+
+/**
+ * 화살표 함수가 아닌 일반 함수를 사용하려면 constructor에 해당 함수를 바인딩 해줘야한다.
+ *
+ * constructor(props) {
+ *  super(props);
+ *  this.state = {};
+ *  this.onChangeInput = this.onChangeInput.bind(this)
+ * }
+ *
+ * onChangeInput(e) {
+ *    this.setState({e.target.value})
+ * }
+ */
