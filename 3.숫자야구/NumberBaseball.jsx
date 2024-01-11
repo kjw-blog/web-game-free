@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Try from './Try';
 
-// this를 사용하지 않는 함수는 컴포넌트 외부에서 사용할 수 있다. 재사용에 용이함
+// this를 사용하지 않는 함수는 컴포넌트 외부에서 사용할 수 있다. 재사용에
 function getNumbers() {
   const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const array = [];
@@ -12,43 +12,39 @@ function getNumbers() {
   return array;
 }
 
-class NumberBaseball extends Component {
-  state = {
-    result: '',
-    value: '',
-    answer: getNumbers(),
-    tries: [],
-  };
+const NumberBaseball = () => {
+  const [result, setResult] = useState('');
+  const [value, setValue] = useState('');
 
-  onSubmitForm = (e) => {
-    const { value, answer, tries } = this.state;
+  // lazy init
+  // 리렌더링 할때마다 getNumbers 함수를 실행하는것을 방지하기 위해 함수 실행결과가 아닌
+  // 함수 자체를 초기값으로 넣어준다.
+  const [answer, setAnswer] = useState(getNumbers);
+  const [tries, setTries] = useState([]);
+
+  const onSubmitForm = (e) => {
     e.preventDefault();
-    if (this.state.value === answer.join('')) {
-      this.setState({
-        result: '홈런',
-        tries: [...tries, { try: value, result: '홈런' }],
-      });
+    if (value === answer.join('')) {
+      setResult('홈런');
+      setTries((prevTries) => [...prevTries, { try: value, result: '홈런' }]);
 
       alert('게임을 다시 시작합니다!');
-      this.setState({
-        value: '',
-        answer: getNumbers(),
-        tries: [],
-      });
+
+      setValue('');
+      setAnswer(getNumbers());
+      setTries([]);
     } else {
       const answerArray = value.split('').map((v) => parseInt(v));
       let strike = 0;
       let ball = 0;
       if (tries.length >= 9) {
-        this.setState({
-          result: `10번 넘게 틀려서 실패! 답은 ${answer.join(',')}였습니다!`,
-        });
+        setResult(`10번 넘게 틀려서 실패! 답은 ${answer.join(',')}였습니다!`);
         alert('게임을 다시 시작합니다!');
-        this.setState({
-          value: '',
-          answer: getNumbers(),
-          tries: [],
-        });
+
+        setValue('');
+        // setState에서는 정상적으로 함수의 반환값을 넣어준다.
+        setAnswer(getNumbers());
+        setTries([]);
       } else {
         for (let i = 0; i < 4; i += 1) {
           if (answerArray[i] === answer[i]) {
@@ -58,44 +54,35 @@ class NumberBaseball extends Component {
           }
         }
 
-        this.setState({
-          tries: [
-            ...tries,
-            {
-              try: value,
-              result: `${strike} 스트라이크, ${ball} 볼 입니다.`,
-            },
-          ],
-          value: '',
-        });
+        setTries((prevTries) => [
+          ...prevTries,
+          { try: value, result: `${strike} 스트라이크, ${ball} 볼 입니다.` },
+        ]);
+        setValue('');
       }
     }
   };
 
-  onChangeInput = (e) => {
-    this.setState({ value: e.target.value });
+  const onChangeInput = (e) => {
+    setValue(e.target.value);
   };
 
-  render() {
-    const { result, value, tries } = this.state;
-
-    return (
-      <>
-        <h1>{result}</h1>
-        <form onSubmit={this.onSubmitForm}>
-          <input maxLength={4} value={value} onChange={this.onChangeInput} />
-          <button>입력</button>
-        </form>
-        <div>시도: {tries.length}</div>
-        <ul>
-          {tries.map((v, i) => (
-            <Try key={`${i + 1}차 시도 :`} tryInfo={v} />
-          ))}
-        </ul>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <h1>{result}</h1>
+      <form onSubmit={onSubmitForm}>
+        <input maxLength={4} value={value} onChange={onChangeInput} />
+        <button>입력</button>
+      </form>
+      <div>시도: {tries.length}</div>
+      <ul>
+        {tries.map((v, i) => (
+          <Try key={`${i + 1}차 시도 :`} tryInfo={v} />
+        ))}
+      </ul>
+    </>
+  );
+};
 
 export default NumberBaseball;
 
