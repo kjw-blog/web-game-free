@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Try from './Try';
 
 // this를 사용하지 않는 함수는 컴포넌트 외부에서 사용할 수 있다. 재사용에
@@ -13,6 +13,8 @@ function getNumbers() {
 }
 
 const NumberBaseball = () => {
+  // 클래스 컴포넌트에서는 createRef를 사용해 줄 수 있다.
+  const inputRef = useRef(null);
   const [result, setResult] = useState('');
   const [value, setValue] = useState('');
 
@@ -61,6 +63,8 @@ const NumberBaseball = () => {
         setValue('');
       }
     }
+
+    inputRef.current.focus();
   };
 
   const onChangeInput = (e) => {
@@ -71,7 +75,12 @@ const NumberBaseball = () => {
     <>
       <h1>{result}</h1>
       <form onSubmit={onSubmitForm}>
-        <input maxLength={4} value={value} onChange={onChangeInput} />
+        <input
+          ref={inputRef}
+          maxLength={4}
+          value={value}
+          onChange={onChangeInput}
+        />
         <button>입력</button>
       </form>
       <div>시도: {tries.length}</div>
