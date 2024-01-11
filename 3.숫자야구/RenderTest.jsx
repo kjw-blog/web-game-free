@@ -1,23 +1,19 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-class Test extends Component {
+// PureComponent는 이전 강의에서 설명한 shouldComponentUpdate가 자동으로 적용된 컴포넌트이다.
+// 단점: 객체나 배열같은 참조 타입은 판단하기 어려워함
+class Test extends PureComponent {
   state = {
     counter: 0,
+    array: [],
   };
 
-  // 리액트는 state가 변할때 말고도 setState가 실행될 때도 리렌더링 하기때문에
-  // 불필요한 리렌더링을 막기위해 아래와 같이 설정해준다
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    // 현재 counter와 변경될 state의 counter가 다르면 리렌더링함
-    if (this.state.counter !== nextState.counter) {
-      return true;
-    }
-
-    return false;
-  }
-
   onClick = () => {
-    this.setState({});
+    this.setState((prevState) => {
+      return {
+        array: [...prevState.array, 1],
+      };
+    });
   };
 
   render() {
