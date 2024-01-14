@@ -27,7 +27,7 @@ class RSP extends Component {
   state = {
     result: '',
     score: 0,
-    imgCoord: '0',
+    imgCoord: rspCoords.바위,
   };
 
   interval;
