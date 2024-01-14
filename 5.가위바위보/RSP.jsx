@@ -1,9 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-
-// 클래스 컴포넌트
-// constructor -> render -> ref -> componentDidMount ->
-// (state/props 바뀔 때 -> shouldComponentUpdate(true) -> render -> componentDidUpdate)
-// (부모 컴포넌트에서 해당 컴포넌트가 사라질 때 -> componentWillUnmount) -> 소멸
+import useInterval from './useInterval';
 
 const rspCoords = {
   바위: '0',
@@ -27,8 +23,7 @@ const RSP = () => {
   const [result, setResult] = useState('');
   const [score, setScore] = useState(0);
   const [imgCoord, setImgCoord] = useState(rspCoords.바위);
-
-  const interval = useRef();
+  const [isRunning, setIsRunning] = useState(true);
 
   const changeHand = () => {
     if (imgCoord === rspCoords.바위) {
@@ -41,35 +36,29 @@ const RSP = () => {
   };
 
   const onClickBtn = (choice) => () => {
-    clearInterval(interval.current);
-    const myScore = scores[choice];
-    const cpuScore = scores[computerChoice(imgCoord)];
-    const diff = myScore - cpuScore;
+    if (isRunning) {
+      setIsRunning(false);
+      const myScore = scores[choice];
+      const cpuScore = scores[computerChoice(imgCoord)];
+      const diff = myScore - cpuScore;
 
-    if (diff === 0) {
-      setResult('비겼습니다');
-    } else if ([-1, 2].includes(diff)) {
-      setResult('이겼습니다!');
-      setScore((prevScore) => prevScore + 1);
-    } else {
-      setResult('졌습니다!');
-      setScore((prevScore) => prevScore - 1);
+      if (diff === 0) {
+        setResult('비겼습니다');
+      } else if ([-1, 2].includes(diff)) {
+        setResult('이겼습니다!');
+        setScore((prevScore) => prevScore + 1);
+      } else {
+        setResult('졌습니다!');
+        setScore((prevScore) => prevScore - 1);
+      }
+
+      setTimeout(() => {
+        setIsRunning(true);
+      }, 1000);
     }
-
-    setTimeout(() => {
-      interval.current = setInterval(changeHand, 100);
-    }, 1000);
   };
 
-  useEffect(() => {
-    // componentDidMount, componentDidUpdate의 기능을 비슷하게 할 수 있음
-    interval.current = setInterval(changeHand, 100);
-
-    return () => {
-      // componentWillUnmount의 기능을 비슷하게 할 수 있음
-      clearInterval(interval.current);
-    };
-  }, [imgCoord]);
+  useInterval(changeHand, isRunning ? 100 : null);
 
   return (
     <>
