@@ -1,9 +1,11 @@
-import React, { useReducer, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 import Table from './Table';
+
+const SET_WINNER = 'SET_WINNER';
 
 const initialState = {
   winner: '',
-  turn: '0',
+  turn: 'O',
   tableData: [
     ['', '', ''],
     ['', '', ''],
@@ -11,7 +13,17 @@ const initialState = {
   ],
 };
 
-const reducer = (state, action) => {};
+const reducer = (state, action) => {
+  switch (action.type) {
+    case SET_WINNER:
+      // state.winner = action.winner 잘못된 사용법임 불변성을 유지해야함
+
+      return {
+        ...state,
+        winner: action.winner,
+      };
+  }
+};
 
 const TicTacToe = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -24,10 +36,17 @@ const TicTacToe = () => {
   //   ['', '', ''],
   // ]);
 
+  const onClickTable = useCallback(() => {
+    dispatch({
+      type: SET_WINNER,
+      winner: 'O',
+    });
+  }, []);
+
   return (
     <>
-      <Table />
-      {winner && <div>{winner}님의 승리!</div>}
+      <Table onClick={onClickTable} tableData={state.tableData} />
+      {state.winner && <div>{state.winner}님의 승리!</div>}
     </>
   );
 };
