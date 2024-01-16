@@ -6,6 +6,7 @@ const Tr = ({ rowData, rowIndex, dispatch }) => {
     <tr>
       {rowData.map((td, i) => (
         <Td
+          key={i}
           rowIndex={rowIndex}
           cellIndex={i}
           cellData={td}
