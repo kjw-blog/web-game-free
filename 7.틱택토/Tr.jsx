@@ -1,14 +1,17 @@
 import React from 'react';
 import Td from './Td';
 
-const Tr = ({ rowData }) => {
+const Tr = ({ rowData, rowIndex, dispatch }) => {
   return (
     <tr>
-      {Array(rowData.length)
-        .fill()
-        .map(() => (
-          <Td></Td>
-        ))}
+      {rowData.map((td, i) => (
+        <Td
+          rowIndex={rowIndex}
+          cellIndex={i}
+          cellData={td}
+          dispatch={dispatch}
+        ></Td>
+      ))}
     </tr>
   );
 };
