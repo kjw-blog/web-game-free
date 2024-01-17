@@ -27,7 +27,6 @@ const initialState = {
 };
 
 const plantMine = (row, cell, mine) => {
-  console.log(row, cell, mine);
   const candidate = Array(row * cell)
     .fill()
     .map((arr, i) => {
@@ -83,6 +82,39 @@ const reducer = (state, action) => {
       const tableData = [...state.tableData];
       tableData[action.row] = [...state.tableData[action.row]];
       tableData[action.row][action.cell] = CODE.OPENED;
+
+      /** 주변 칸 검사 로직 */
+      let around = [];
+
+      if (tableData[action.row - 1]) {
+        // 첫번째 줄이 아닐 때
+        around = around.concat(
+          tableData[action.row - 1][action.cell - 1],
+          tableData[action.row - 1][action.cell],
+          tableData[action.row - 1][action.cell + 1]
+        );
+      }
+      around = around.concat(
+        tableData[action.row][action.cell - 1],
+        tableData[action.row][action.cell + 1]
+      );
+
+      if (tableData[action.row + 1]) {
+        // 마지막 줄이 아닐 때
+        around = around.concat(
+          tableData[action.row + 1][action.cell - 1],
+          tableData[action.row + 1][action.cell],
+          tableData[action.row + 1][action.cell + 1]
+        );
+      }
+
+      const count = around.filter((v) =>
+        [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)
+      ).length;
+
+      tableData[action.row][action.cell] = count;
+
+      /** 주변 칸 검사 로직 */
 
       return { ...state, tableData };
     }
