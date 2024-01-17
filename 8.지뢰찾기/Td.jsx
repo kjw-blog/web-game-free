@@ -94,7 +94,7 @@ const Td = ({ rowIndex, cellIndex }) => {
           return;
         case CODE.QUESTION_MINE:
         case CODE.QUESTION:
-          dispatch({ type: NORMALIZE_CELL, row: rowIndex, cell, cellIndex });
+          dispatch({ type: NORMALIZE_CELL, row: rowIndex, cell: cellIndex });
           return;
         default:
           return;

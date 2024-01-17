@@ -69,7 +69,7 @@ export const OPEN_CELL = 'OPEN_CELL';
 export const CLICK_MINE = 'CLICK_MINE ';
 export const FLAG_CELL = 'FLAG_CELL ';
 export const QUESTION_CELL = 'QUESTION_CELL ';
-export const NORMALIZE_CELL = 'CLICK_MINE ';
+export const NORMALIZE_CELL = 'NORMALIZE_CELL ';
 
 const reducer = (state, action) => {
   switch (action.type) {
