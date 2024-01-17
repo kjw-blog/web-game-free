@@ -1,4 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import MineSearch from './MineSearch';
 
-ReactDOM.createRoot(document.querySelector('#root')).render(<>지뢰찾기</>);
+ReactDOM.createRoot(document.querySelector('#root')).render(<MineSearch />);
